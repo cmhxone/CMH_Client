@@ -1,14 +1,17 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
+#include "WindowBuilder/GameWindowBuilder.h"
 
 
 int main(int argc, char** argv) {
 
-    auto *window = new sf::RenderWindow(
-            sf::VideoMode(1200, 900),
-            "GameWindow",
-            sf::Style::Default
-    );
+    auto windowBuilder = new GameWindowBuilder();
+    windowBuilder->setTitle("Game Window")
+        ->setWidth(1200)
+        ->setHeight(900)
+        ->setVSyncEnabled(true)
+        ->setStyle(sf::Style::Default)
+        ->removeStyle(sf::Style::Resize);
+
+    auto window = windowBuilder->build();
     window->setVerticalSyncEnabled(true);
 
     while (window->isOpen()) {
@@ -30,5 +33,5 @@ int main(int argc, char** argv) {
         window->display();
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
