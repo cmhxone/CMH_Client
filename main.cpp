@@ -1,37 +1,53 @@
 #include "WindowBuilder/GameWindowBuilder.h"
+#include "Window/GameWindow.h"
 
+#include <iostream>
+#include <chrono>
+#include <random>
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
 
     auto windowBuilder = new GameWindowBuilder();
     windowBuilder->setTitle("Game Window")
-        ->setWidth(1200)
-        ->setHeight(900)
-        ->setVSyncEnabled(true)
-        ->setStyle(sf::Style::Default)
-        ->removeStyle(sf::Style::Resize);
+            ->setWidth(1200)
+            ->setHeight(900)
+            ->setVSyncEnabled(true)
+            ->setStyle(sf::Style::Default)
+            ->removeStyle(sf::Style::Resize);
 
-    auto window = windowBuilder->build();
-    window->setVerticalSyncEnabled(true);
+    GameWindow *window;
+    window = new GameWindow(*windowBuilder);
+    window->setEventHandler([](IWindow *window, sf::Event &event){
+        switch (event.type) {
+            case sf::Event::Closed:
+                std::cout << "Good bye" << std::endl;
+                window->getWindow()->close();
+                break;
 
-    while (window->isOpen()) {
+            default:
+                break;
+        }
+    });
+    window->setGameLoop([](IWindow *window) {
+        std::cout << "game loop called" << std::endl;
+    });
+    window->setDrawLoop([](IWindow *window) {
 
-        sf::Event event{};
-        while (window->pollEvent(event)) {
+        if (window->getFrame() % 6000 == 1) {
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> dist(0, 255);
 
-            switch (event.type) {
-                case sf::Event::Closed:
-                    window->close();
-                    break;
+            unsigned int red = dist(gen);
+            unsigned int green = dist(gen);
+            unsigned int blue = dist(gen);
 
-                default:
-                    break;
-            }
+            window->getWindow()->clear(sf::Color(red, green, blue));
+            window->getWindow()->display();
         }
 
-        window->clear(sf::Color(10, 30, 50));
-        window->display();
-    }
+    });
+    window->run();
 
     return EXIT_SUCCESS;
 }
