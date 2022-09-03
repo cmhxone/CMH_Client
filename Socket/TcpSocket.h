@@ -31,9 +31,20 @@ public:
 
     [[nodiscard]] sf::Time getIdleTimeout() const;
 
+    void setRemoteAddr(const sf::IpAddress &);
+
+    void setRemotePort(const unsigned short);
+
+    void setConnectionTimeout(const unsigned int);
+
+    void setIdleTimeout(const unsigned int);
+
     void setOnConnectHandler(std::function<void(ISocket *)>);
+
     void setOnDisonnectHandler(std::function<void(ISocket *)>);
+
     void setOnReceiveHandler(std::function<void(ISocket *)>);
+
     void setOnSendHandler(std::function<void(ISocket *)>);
 
 protected:

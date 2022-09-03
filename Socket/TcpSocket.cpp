@@ -97,3 +97,19 @@ void TcpSocket::setOnReceiveHandler(std::function<void(ISocket *)> function) {
 void TcpSocket::setOnSendHandler(std::function<void(ISocket *)> function) {
     m_onSendHandler = std::move(function);
 }
+
+void TcpSocket::setRemoteAddr(const sf::IpAddress &addr) {
+    m_remoteAddr = addr;
+}
+
+void TcpSocket::setRemotePort(const unsigned short port) {
+    m_remotePort = port;
+}
+
+void TcpSocket::setConnectionTimeout(const unsigned int timeout) {
+    m_connection_timeout = timeout;
+}
+
+void TcpSocket::setIdleTimeout(const unsigned int timeout) {
+    m_idle_timeout = timeout;
+}
