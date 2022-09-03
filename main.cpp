@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
     });
     window->setDrawLoop([](IWindow *window) {
 
-        if (window->getFrame() % 6000 == 1) {
+        if (window->getFrame() % 60'000 == 1) {
             std::random_device rd;
             std::mt19937 gen(rd());
             std::uniform_int_distribution<> dist(0, 255);
