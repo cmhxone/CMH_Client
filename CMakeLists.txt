@@ -4,6 +4,8 @@ project(CMH_Client)
 set(CMAKE_CXX_STANDARD 20)
 
 set(SFML_STATIC_LIBRARIES TRUE)
+# TODO: 윈도우/MacOS/Linux용 분리 필요함
+# TODO: SFML 디렉토리 설정 환경변수로 빼자 -> README에 기록
 set(SFML_DIR D:/SFML/Mingw_x64/lib/cmake/SFML)
 
 set(CMAKE_CXX_FLAGS -static)
