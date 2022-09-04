@@ -4,16 +4,19 @@ project(CMH_Client)
 set(CMAKE_CXX_STANDARD 20)
 
 message(${CMAKE_HOST_SYSTEM_NAME})
+message($ENV{SFML_CMAKE_DIR})
 
-if (${CMAKE_HOST_SYSTEM_NAME} EQUAL "Linux")
+if (UNIX)
     set(SFML_STATIC_LIBRARIES FALSE)
-elseif (${CMAKE_HOST_SYSTEM_NAME} EQUAL "Windows")
-    set(SFML_DIR ${SFML_CMAKE_DIR})
+elseif (WIN32)
+    set(SFML_DIR "$ENV{SFML_CMAKE_DIR}")
     set(SFML_STATIC_LIBRARIES TRUE)
     set(CMAKE_CXX_FLAGS -static)
 endif ()
 
 find_package(SFML 2.5.1 COMPONENTS system window graphics network audio REQUIRED)
 
-add_executable(CMH_Client main.cpp WindowBuilder/IWindowBuilder.h WindowBuilder/GameWindowBuilder.cpp WindowBuilder/GameWindowBuilder.h Window/IWindow.h Window/GameWindow.cpp Window/GameWindow.h)
-target_link_libraries(CMH_Client sfml-system sfml-window sfml-graphics sfml-audio sfml-audio)
+configure_file(application.properties application.properties COPYONLY)
+
+add_executable(CMH_Client main.cpp WindowBuilder/IWindowBuilder.h WindowBuilder/GameWindowBuilder.cpp WindowBuilder/GameWindowBuilder.h Window/IWindow.h Window/GameWindow.cpp Window/GameWindow.h Socket/ISocket.h Socket/TcpSocket.cpp Socket/TcpSocket.h SocketBuilder/ISocketBuilder.h SocketBuilder/TcpSocketBuilder.cpp SocketBuilder/TcpSocketBuilder.h PropertyReader/PropertyReader.cpp PropertyReader/PropertyReader.h)
+target_link_libraries(CMH_Client sfml-system sfml-window sfml-graphics sfml-network sfml-audio)

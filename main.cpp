@@ -1,11 +1,33 @@
 #include "WindowBuilder/GameWindowBuilder.h"
 #include "Window/GameWindow.h"
 
+#include "SocketBuilder/TcpSocketBuilder.h"
+#include "Socket/TcpSocket.h"
+#include "PropertyReader/PropertyReader.h"
+
 #include <iostream>
-#include <chrono>
 #include <random>
 
 int main(int argc, char **argv) {
+
+    PropertyReader pr("application.properties");
+
+    auto socketBuilder = new TcpSocketBuilder();
+    socketBuilder->setBlocking(false);
+
+    auto *socket = new TcpSocket(*socketBuilder);
+    socket->setRemoteAddr(pr.getProperty("ip"));
+    socket->setRemotePort(std::stoi(pr.getProperty("port")));
+    socket->setOnConnectHandler([](ISocket *socket) {
+       std::cout << "Connected" << std::endl;
+       sf::Packet packet;
+       packet << "Hello World\r\n";
+       socket->send(packet);
+    });
+    socket->setOnDisonnectHandler([](ISocket *socket) {
+        std::cout << "Disconnected" << std::endl;
+    });
+    socket->connect();
 
     auto windowBuilder = new GameWindowBuilder();
     windowBuilder->setTitle("Game Window")
@@ -29,7 +51,7 @@ int main(int argc, char **argv) {
         }
     });
     window->setGameLoop([](IWindow *window) {
-        std::cout << "game loop called" << std::endl;
+//        std::cout << "game loop called" << std::endl;
     });
     window->setDrawLoop([](IWindow *window) {
 
@@ -48,6 +70,8 @@ int main(int argc, char **argv) {
 
     });
     window->run();
+
+    socket->disconnect();
 
     return EXIT_SUCCESS;
 }
