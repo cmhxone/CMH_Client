@@ -21,7 +21,7 @@ public:
 
     void disconnect() override;
 
-    void send(void *) override;
+    void send(sf::Packet &) override;
 
     [[nodiscard]] const sf::IpAddress &getRemoteAddr() const;
 

@@ -25,9 +25,9 @@ void TcpSocket::disconnect() {
     m_socket->disconnect();
 }
 
-void TcpSocket::send(void *packet) {
+void TcpSocket::send(sf::Packet &packet) {
     onSend(this);
-    m_socket->send(packet, sizeof packet);
+    m_socket->send(packet);
 }
 
 void TcpSocket::onConnect(ISocket *socket) {

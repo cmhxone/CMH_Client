@@ -15,7 +15,9 @@ int main(int argc, char **argv) {
     auto *socket = new TcpSocket(*socketBuilder);
     socket->setOnConnectHandler([](ISocket *socket) {
        std::cout << "Connected" << std::endl;
-        socket->send((void*)"Hello");
+       sf::Packet packet;
+       packet << "Hello World\r\n";
+       socket->send(packet);
     });
     socket->setOnDisonnectHandler([](ISocket *socket) {
         std::cout << "Disconnected" << std::endl;

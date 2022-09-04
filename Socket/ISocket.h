@@ -31,8 +31,7 @@ public:
     /**
      * Send packet to server
      */
-     // TODO: create IPacket abstract class to send packet...
-    virtual void send(void *) = 0;
+    virtual void send(sf::Packet &) = 0;
 
 protected:
     /**
