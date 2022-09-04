@@ -3,16 +3,21 @@
 
 #include "SocketBuilder/TcpSocketBuilder.h"
 #include "Socket/TcpSocket.h"
+#include "PropertyReader/PropertyReader.h"
 
 #include <iostream>
 #include <random>
 
 int main(int argc, char **argv) {
 
+    PropertyReader pr("application.properties");
+
     auto socketBuilder = new TcpSocketBuilder();
     socketBuilder->setBlocking(false);
 
     auto *socket = new TcpSocket(*socketBuilder);
+    socket->setRemoteAddr(pr.getProperty("ip"));
+    socket->setRemotePort(std::stoi(pr.getProperty("port")));
     socket->setOnConnectHandler([](ISocket *socket) {
        std::cout << "Connected" << std::endl;
        sf::Packet packet;
